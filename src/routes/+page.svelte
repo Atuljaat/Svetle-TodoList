@@ -6,9 +6,9 @@
 	
 	let todos: Todo[] = $state([]);
     let sortPriority : sort = $state('Time') 
-	let todoOptions = ["All","Completed","Pending"]
-	let completedTodos : Todo[] = $state([])
-	let pendingTodos : Todo[] = $state([])
+	let filterOptions = ["All","Completed","Pending"]
+	let filteredTodos: Todo[] = $state([])
+	let filter = $state("All")
 
 	$effect(() => {
 		if (browser) {
@@ -20,7 +20,7 @@
 
 	let inputText: string = $state('');
 
-	function addTodo() {
+	function addTodo() {	
 		if (inputText) {
 			todos.push({
 				id: uuidv4(),
@@ -100,9 +100,6 @@
 
     let sortOptions = ["Time","Priority"]
 
-	function sort
-
-
     function sortTodos (priority:sort) : void {
         if (priority === "Time") {
 			let newArray = todos
@@ -130,9 +127,21 @@
         sortTodos(sortPriority)
     })
 
+	$effect(() => {
+		if (todos) {
+			if (filter == "Completed") {
+				filteredTodos = todos.filter((todo) => todo.isDone == true)
+			} else if ( filter == "Pending" ) {
+				filteredTodos = todos.filter( (todo) => todo.isDone == false  )
+			} else {
+				filteredTodos = [...todos]
+			}
+		}
+	})
+
 </script>
 
-<div class="flex min-h-screen flex-col bg-green-300 py-24">
+<div class="flex min-h-screen flex-col bg-green-300 py-24 px-5">
 	<div class="flex w-full flex-col items-center justify-center gap-5">
 		<div class="text-2xl">Enter Todo</div>
 		<form onsubmit={addTodo} class="flex w-full justify-center gap-4">
@@ -146,22 +155,33 @@
 			<button class="cursor-pointer border p-1"> Add </button>
 		</form>
 	</div>
-    <div class="flex justify-center my-3" >
-        <label for="">Sort : </label>
-        <select bind:value={sortPriority}>
-            {#each sortOptions as sortOpt (sortOpt) }
-                <option value={sortOpt} >
-                    {sortOpt}
-                </option>
-            {/each}
-        </select>
-		<select name="" id="">
-			
-		</select>
+    <div class="flex justify-center my-3 gap-24" >
+		<div>
+			<label for="">Sort : </label>
+			<select bind:value={sortPriority}>
+				{#each sortOptions as sortOpt (sortOpt) }
+					<option value={sortOpt} >
+						{sortOpt}
+					</option>
+				{/each}
+			</select>
+		</div>
+		<div>
+			<label for="">
+				Filter : 
+			</label>
+			<select bind:value={filter}>
+				{#each filterOptions as filter }
+					<option value={filter}>
+						{filter}
+					</option>
+				{/each}
+			</select>
+		</div>
     </div>
 	<div class="flex items-center justify-center">
 		<ul>
-			{#each todos as todo (todo.id)}
+			{#each filteredTodos as todo (todo.id)}
 				<TodoComponent {...todo} ondelete={deleteTodo} {changePriority} {toggleCheck} {editTodo} {editDeadline} />
 			{/each}
 		</ul>
