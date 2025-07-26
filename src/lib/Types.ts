@@ -1,3 +1,5 @@
+import { authClient } from "./auth/auth-client";
+
 export type Todo =  {
     readonly id : string;
     text : string;
@@ -8,3 +10,6 @@ export type Todo =  {
 }
 
 export type sort = "Time" | "Priority" | "Deadline"
+
+export type SignInEmailParams = Parameters<typeof authClient.signIn.email>[0];
+export type SignUpEmailParams = Parameters<typeof authClient.signUp.email>[0];
