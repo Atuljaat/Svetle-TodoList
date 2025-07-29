@@ -9,10 +9,16 @@ export const handle: Handle = async ({ event, resolve }) => {
         headers : event.request.headers
     })
     
+    
     const protectedRoutes = ['/todos']
     const loginRoutes = ['/login','/signup']
     const path = event.url.pathname
     // console.log(path)
+    
+    if (session) {
+        event.locals.session = session
+        event.locals.userId = session.user.id
+     }
 
     if ( session?.user ) {
         if (loginRoutes.includes(path)){

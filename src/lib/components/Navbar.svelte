@@ -5,6 +5,10 @@ import { goto } from '$app/navigation';
 
 const NavItems = $state.raw([
 	{
+		name : 'Todo',
+		slug : '/todos'
+	},
+	{
 		name : 'About',
 		slug : '/about'
 	}
@@ -25,7 +29,7 @@ const handleSignOut = async () => {
 <nav class="sticky mt-0 py-2.5 h-[20%] ">
 	<div class="flex items-center justify-around font-semibold text-xl">
 		<h1>
-			<a href="/todos">
+			<a href="/">
 				TodoList
 			</a>
 		</h1>

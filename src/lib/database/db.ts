@@ -1,16 +1,22 @@
-// import Database from "better-sqlite3";
+import Database from "better-sqlite3";
 
-// const db = new Database('mydb.db')
+const db = new Database('./myAuth.db')
 
-// db.exec(
-//     `
-//     CREATE TABLE IF NOT EXISTS users (
-//         id INTEGER PRIMARY KEY AUTOINCREMENT,
-//         name TEXT NOT NULL ,
-//         email TEXT UNIQUE NOT NULL,
-//         password TEXT NOT NULL
-//     )
-//     `
-// )
+db.pragma('foreign_keys = ON')
 
-// console.log('db is ready')
+// db.exec('DROP TABLE todos')
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS todos (
+        id TEXT PRIMARY KEY,
+        user_id TEXT NOT NULL,
+        todo TEXT NOT NULL,
+        isDone BOOLEAN DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        deadline DATETIME ,
+        priority text DEFAULT 'Normal',
+        FOREIGN KEY (user_id) REFERENCES user(id)
+    )    
+`)
+
+export default db

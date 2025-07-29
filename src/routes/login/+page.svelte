@@ -53,18 +53,21 @@
         {/if}
         <div  >
             <label for=""> Email : </label>
-            <input autocomplete="off" bind:value={email} type="text"  class="bg-red-200 text-gray-700">
+            <input autocomplete="off" bind:value={email} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <div  >
             <label for=""> Password : </label>
-            <input autocomplete="off" bind:value={password} type="text" class="bg-red-200 text-gray-700">
+            <input autocomplete="off" bind:value={password} type="text" class="p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
-        <button class="bg-red-300 p-2 my-2 rounded cursor-pointer" >
-            Submit 
+        <button class="bg-red-300 p-2 my-2 rounded cursor-pointer hover:scale-110" >
+            Submit
         </button>
         <div class="my-10" >
+            <span class="text-gray-700">
+                Didnt have a account ?
+            </span>
             <a href="/signup">
-                Didnt have a account ? Signup
+                Signup
             </a>
         </div>
     </form>

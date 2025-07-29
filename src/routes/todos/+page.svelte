@@ -3,39 +3,81 @@
 	import type { sort, Todo } from '$lib/Types';
 	import { v4 as uuidv4 } from 'uuid';
 	import { browser } from '$app/environment';
-	
-	let todos: Todo[] = $state([]);
+	let {data} = $props();
+	console.log('mydata :  ' ,data.dbTodos)
+	let todos: Todo[] = $state(data.dbTodos);
     let sortPriority : sort = $state('Time') 
 	let filterOptions = ["All","Completed","Pending"]
 	let filteredTodos: Todo[] = $state([])
 	let filter = $state("All")
 
-	$effect(() => {
-		if (browser) {
-			let localTodos = JSON.parse(localStorage.getItem('todos') ?? '[]');
-			todos = localTodos;
-		}
-	});
+	// $effect(() => {
+	// 	if (browser) {
+	// 		let localTodos = JSON.parse(localStorage.getItem('todos') ?? '[]');
+	// 		todos = localTodos;
+	// 	}
+	// });
+
+	
+	
 
 
 	let inputText: string = $state('');
 
-	function addTodo() {	
+	function addTodo() {
+		let unqiueId = uuidv4()	
 		if (inputText) {
 			todos.push({
-				id: uuidv4(),
+				id: unqiueId,
 				text: inputText.trim(),
 				isDone: false,
 				time: new Date().toLocaleString(),
 				deadline: '',
 				priority: 'Normal'
 			});
+			// addTodoInDB(unqiueId,inputText.trim())
+			const data = {
+				id : unqiueId,
+				todo : inputText.trim()
+			}
+			dbInteraction(data,'add')
 			inputText = '';
 			localStorage.setItem('todos', JSON.stringify(todos));
 		}
 	}
 
+	// const addTodoInDB = async (id:string,text:string) => {
+	// 	const data = {
+	// 		id : id,
+	// 		todo : text,
+	// 		type : 'add'
+	// 	}
+	// 	try {
+	// 		const response = await fetch('/todos',{
+	// 			method:"POST",
+	// 			headers:{
+	// 				"content-type":"applications/json"
+	// 			},
+	// 			body : JSON.stringify(data)
+	// 		})
+	// 		if (response.ok){
+	// 			const jsonData = await response.json()
+	// 			console.log(jsonData)
+	// 			return jsonData
+	// 		}
+	// 	} catch (e) {
+	// 		console.log('error : ',e)
+	// 	}
+	// }
+
+	
+
+
 	function deleteTodo(id: string): void {
+		const data = {
+			id : id 
+		}
+		dbInteraction(data,'delete')
 		let newArray = todos.filter((todo) => todo.id != id);
 		todos = newArray;
 		localStorage.setItem('todos', JSON.stringify(todos));
@@ -100,44 +142,69 @@
 
     let sortOptions = ["Time","Priority"]
 
-    function sortTodos (priority:sort) : void {
-        if (priority === "Time") {
-			let newArray = todos
-			newArray.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
-            todos = newArray
-        } else if (priority === "Priority"){
-			let priorityOrder = ["High","Normal","Low"]
-			let newArray = todos
-			newArray.sort((a,b) =>{
-				let indexA = priorityOrder.indexOf(a.priority)
-				let indexB = priorityOrder.indexOf(b.priority)
-				if (indexA != indexB){
-					return indexA - indexB
-				}
-				return 0
-			}
-			)
-		} 
-		else {
-            todos.sort(() => Math.random() - 0.5)
-        }
-    }
+    // function sortTodos (priority:sort) : void {
+    //     if (priority === "Time") {
+	// 		let newArray = todos
+	// 		newArray.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+    //         todos = newArray
+    //     } else if (priority === "Priority"){
+	// 		let priorityOrder = ["High","Normal","Low"]
+	// 		let newArray = todos
+	// 		newArray.sort((a,b) =>{
+	// 			let indexA = priorityOrder.indexOf(a.priority)
+	// 			let indexB = priorityOrder.indexOf(b.priority)
+	// 			if (indexA != indexB){
+	// 				return indexA - indexB
+	// 			}
+	// 			return 0
+	// 		}
+	// 		)
+	// 	} 
+	// 	else {
+    //         todos.sort(() => Math.random() - 0.5)
+    //     }
+    // }
 
-    $effect( () => {
-        sortTodos(sortPriority)
-    })
+    // $effect( () => {
+    //     sortTodos(sortPriority)
+    // })
 
-	$effect(() => {
-		if (todos) {
-			if (filter == "Completed") {
-				filteredTodos = todos.filter((todo) => todo.isDone == true)
-			} else if ( filter == "Pending" ) {
-				filteredTodos = todos.filter( (todo) => todo.isDone == false  )
-			} else {
-				filteredTodos = [...todos]
-			}
+	// $effect(() => {
+	// 	if (todos) {
+	// 		if (filter == "Completed") {
+	// 			filteredTodos = todos.filter((todo) => todo.isDone == true)
+	// 		} else if ( filter == "Pending" ) {
+	// 			filteredTodos = todos.filter( (todo) => todo.isDone == false  )
+	// 		} else {
+	// 			filteredTodos = [...todos]
+	// 		}
+	// 	}
+	// })
+
+	const dbInteraction = async (userData:any,type:string) => {
+		const data = {
+			...userData,
+			type : type
 		}
-	})
+		try {
+			const response = await fetch('/todos',{
+				method:"POST",
+				headers:{
+					"content-type":"applications/json"
+				},
+				body : JSON.stringify(data)
+			})
+			if (response.ok){
+				const jsonData = await response.json()
+				console.log(jsonData)
+				return jsonData
+			}
+		} catch (e) {
+			console.log('error : ',e)
+		}
+	}
+
+
 </script>
 
 <div class="flex min-h-screen flex-col bg-linear-to-r via-[#6EE7B7] from-[#34D399] to-[#00000] py-24 px-5" >
@@ -179,8 +246,13 @@
 		</div>
     </div>
 	<div class="flex items-center justify-center">
-		<ul>
+		<!-- <ul>
 			{#each filteredTodos as todo (todo.id)}
+				<TodoComponent {...todo} ondelete={deleteTodo} {changePriority} {toggleCheck} {editTodo} {editDeadline} />
+			{/each}
+		</ul> -->
+		<ul>
+			{#each todos as todo (todo.id)}
 				<TodoComponent {...todo} ondelete={deleteTodo} {changePriority} {toggleCheck} {editTodo} {editDeadline} />
 			{/each}
 		</ul>
