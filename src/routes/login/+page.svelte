@@ -45,7 +45,10 @@
 
 </script>
 
-    <form onsubmit={login}  class="bg-red-100 min-h-screen flex items-center justify-center flex-col gap-3 text-xl">
+    <form onsubmit={login}  class="bg-[#ffb86a] min-h-screen flex items-center justify-center flex-col gap-3 text-xl">
+        <div class="text-6xl py-4 font-bold stylish " >
+            Login
+        </div>
         {#if errorMessage != ''}
             <div class="text-red-500 text-lg">
                 {errorMessage}
@@ -71,3 +74,10 @@
             </a>
         </div>
     </form>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Reenie+Beanie&display=swap');
+    .stylish {
+        font-family:  cursive;
+    }
+</style>    

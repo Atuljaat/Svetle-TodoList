@@ -1,15 +1,15 @@
 <script lang="ts">
 	import TodoComponent from '$lib/components/Todo.svelte';
-	import type { sort, Todo } from '$lib/Types';
+	import type { filterTodo, sort, Todo } from '$lib/Types';
 	import { v4 as uuidv4 } from 'uuid';
-	import { browser } from '$app/environment';
+	// import { browser } from '$app/environment';
 	let {data} = $props();
-	console.log('mydata :  ' ,data.dbTodos)
+	// console.log('mydata :  ' ,data.dbTodos)
 	let todos: Todo[] = $state(data.dbTodos);
     let sortPriority : sort = $state('Time') 
 	let filterOptions = ["All","Completed","Pending"]
 	let filteredTodos: Todo[] = $state([])
-	let filter = $state("All")
+	let filter:filterTodo = $state("All")
 
 	// $effect(() => {
 	// 	if (browser) {
@@ -18,8 +18,23 @@
 	// 	}
 	// });
 
-	
-	
+	function addPadding (num:number) : string {
+		return num.toString().padStart(2, '0');
+	}
+
+	function convertDateInto24Hours () : string {
+		// 7/30/2025, 11:05:02 PM
+		// 2025-07-30 17:29:49
+		const givenDate = new Date();
+		const year = givenDate.getFullYear();
+		const month = addPadding(givenDate.getMonth() + 1); 
+		const day = addPadding(givenDate.getDate());
+		const hours = addPadding(givenDate.getHours());
+		const minutes = addPadding(givenDate.getMinutes());
+		const seconds = addPadding(givenDate.getSeconds());
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
+
 
 
 	let inputText: string = $state('');
@@ -31,7 +46,7 @@
 				id: unqiueId,
 				text: inputText.trim(),
 				isDone: false,
-				time: new Date().toLocaleString(),
+				time: convertDateInto24Hours(),
 				deadline: '',
 				priority: 'Normal'
 			});
@@ -91,7 +106,10 @@
 			}
 			return todo;
 		});
-
+		const data = {
+			id : id,
+		}
+		dbInteraction(data,'toggleDone')
 		todos = newArray;
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}
@@ -106,11 +124,27 @@
 				}
 				return todo;
 			});
-
+			const data = {
+				id : id ,
+				todo : newText.trim()
+			}
+			dbInteraction(data,'editTodo')
 			todos = newArray;
 			localStorage.setItem('todos', JSON.stringify(todos));
 		}
 	}
+
+	function convertToSQLDate(date: string): string {
+		const givenDate = new Date(date);
+		const year = givenDate.getFullYear();
+		const month = givenDate.getMonth() + 1;
+		const day = givenDate.getDate()
+		const hours = givenDate.getHours();
+		const minutes = givenDate.getMinutes();
+		const seconds = givenDate.getSeconds();
+		return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
+
 
 	function editDeadline(id: string, e: Event): void {
 		let target = e.target as HTMLInputElement;
@@ -121,7 +155,11 @@
 			}
 			return todo;
 		});
-
+		const data = {
+			id : id,
+			deadline : convertToSQLDate(target.value)
+		}
+		dbInteraction(data,'setDeadline')
 		todos = newArray;
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}
@@ -136,50 +174,81 @@
 			}
 			return todo;
 		});
+		const data = {
+			id : id,
+			priority : target.value
+		}
+		dbInteraction(data,'setPriority')
 		todos = newArray;
 		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
     let sortOptions = ["Time","Priority"]
+	// let filterOptions = ["All","Completed","Pending"]
 
-    // function sortTodos (priority:sort) : void {
-    //     if (priority === "Time") {
-	// 		let newArray = todos
-	// 		newArray.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
-    //         todos = newArray
-    //     } else if (priority === "Priority"){
-	// 		let priorityOrder = ["High","Normal","Low"]
-	// 		let newArray = todos
-	// 		newArray.sort((a,b) =>{
-	// 			let indexA = priorityOrder.indexOf(a.priority)
-	// 			let indexB = priorityOrder.indexOf(b.priority)
-	// 			if (indexA != indexB){
-	// 				return indexA - indexB
-	// 			}
-	// 			return 0
-	// 		}
-	// 		)
-	// 	} 
-	// 	else {
-    //         todos.sort(() => Math.random() - 0.5)
-    //     }
-    // }
-
-    // $effect( () => {
-    //     sortTodos(sortPriority)
-    // })
-
-	// $effect(() => {
-	// 	if (todos) {
-	// 		if (filter == "Completed") {
-	// 			filteredTodos = todos.filter((todo) => todo.isDone == true)
-	// 		} else if ( filter == "Pending" ) {
-	// 			filteredTodos = todos.filter( (todo) => todo.isDone == false  )
-	// 		} else {
-	// 			filteredTodos = [...todos]
-	// 		}
+	// async function sortTodos (sortType: sort , filter: filterTodo ) {
+	// 	const userData = {
+	// 		sortBy: sortType,
+	// 		filterTodo: filter
 	// 	}
+	// 	const data = {
+	// 		...userData,
+	// 		type : 'sort'
+	// 	}
+	// 	try {
+	// 		const response = await fetch('/todos',{
+	// 			method:"POST",
+	// 			headers:{
+	// 				"content-type":"applications/json"
+	// 			},
+	// 			body : JSON.stringify(data)
+	// 		})
+	// 		if (response.ok){
+	// 			const jsonData = await response.json()
+	// 			todos = jsonData.todos;
+	// 			// console.log(jsonData)
+	// 			// return jsonData
+	// 		}
+	// 	} catch (e) {
+	// 		console.log('error : ',e)
+	// 	}
+	// }
+
+	// $effect( () => {
+	// 		// sortTodos(sortPriority, filter)
+	// 		if (sortPriority && filter){
+	// 			sortTodos(sortPriority, filter)
+	// 			console.log('useeffect called for sorting todos')
+	// 		}
 	// })
+
+    function sortTodos (priority:sort) : void {
+        if (priority === "Time") {
+			let newArray = todos
+			newArray.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+            todos = newArray
+        } else if (priority === "Priority"){
+			let priorityOrder = ["High","Normal","Low"]
+			let newArray = todos
+			newArray.sort((a,b) =>{
+				let indexA = priorityOrder.indexOf(a.priority)
+				let indexB = priorityOrder.indexOf(b.priority)
+				if (indexA != indexB){
+					return indexA - indexB
+				}
+				return 0
+			}
+			)
+		} 
+		else {
+            todos.sort(() => Math.random() - 0.5)
+        }
+    }
+
+    $effect( () => {
+        sortTodos(sortPriority)
+    })
+
 
 	const dbInteraction = async (userData:any,type:string) => {
 		const data = {
@@ -196,20 +265,20 @@
 			})
 			if (response.ok){
 				const jsonData = await response.json()
-				console.log(jsonData)
+				// console.log(jsonData)
 				return jsonData
 			}
 		} catch (e) {
-			console.log('error : ',e)
+			// console.log('error : ',e)
 		}
 	}
 
 
 </script>
 
-<div class="flex min-h-screen flex-col bg-linear-to-r via-[#6EE7B7] from-[#34D399] to-[#00000] py-24 px-5" >
+<div class="flex min-h-screen flex-col bg-linear-to-r bg-[#ffb86a] py-24 px-5" >
 	<div class="flex w-full flex-col items-center justify-center gap-5">
-		<div class="text-2xl">Enter Todo</div>
+		<div class="text-6xl stylish my-5"> Write Something you want do </div>
 		<form onsubmit={addTodo} class="flex w-full justify-center gap-4">
 			<input
 				bind:value={inputText}
@@ -218,7 +287,7 @@
 				type="text"
 				autocomplete="off"
 			/>
-			<button class="cursor-pointer border p-1"> Add </button>
+			<button class="cursor-pointer border p-2 rounded hover:scale-105 transition-all duration-150 bg-[#ffd6a7] hover:bg-[#fef3c6]"> Add </button>
 		</form>
 	</div>
     <div class="flex justify-center my-3 gap-24 mx-12" >
@@ -232,7 +301,7 @@
 				{/each}
 			</select>
 		</div>
-		<div>
+		<!-- <div>
 			<label for="">
 				Filter : 
 			</label>
@@ -243,7 +312,7 @@
 					</option>
 				{/each}
 			</select>
-		</div>
+		</div> -->
     </div>
 	<div class="flex items-center justify-center">
 		<!-- <ul>
@@ -258,3 +327,10 @@
 		</ul>
 	</div>
 </div>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Reenie+Beanie&display=swap');
+	.stylish {
+		font-family: "Pacifico", cursive;
+	}
+</style>

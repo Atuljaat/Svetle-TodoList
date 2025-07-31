@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Trash } from 'lucide-svelte';
-	import { CircleCheck } from 'lucide-svelte';
+	import { CircleCheck  } from 'lucide-svelte';
 	import { Circle } from 'lucide-svelte';
 	import { Pencil } from 'lucide-svelte';
     let { id , text , isDone , ondelete , toggleCheck , editTodo , time , editDeadline , deadline , priority , changePriority} =  $props()
@@ -22,10 +22,10 @@
 
 </script>	
 
-<li class="m-5 rounded border p-3 text-xl max-w-lg">
+<li class={`m-5 rounded border transition-all duration-200 p-3 text-xl max-w-lg ${isDone ? 'bg-[#ff8904] ': 'bg-[#ffd6a7]' } `}>
 	<div class="grid grid-cols-12 place-items-center">
-		<div class="col-span-1">
-			<button onclick={() => toggleCheck(id)} >
+		<div class="col-span-1 cursor-pointer">
+			<button class="cursor-pointer" onclick={() => toggleCheck(id)} >
 				{#if isDone}
 					<CircleCheck />
 				{:else}
@@ -35,7 +35,10 @@
 		</div>
 		<div class="col-span-8 col-start-3 text-wrap">
 			<!-- {text} -->
-			<input type="text" value={text} disabled />
+			<!-- <div type="text" class={` ${isDone && 'overline'} `} value={text} disabled /> -->
+			<div class={` ${isDone && 'line-through'} `} >
+				{text}
+			</div>
 		</div>
 		<div class="col-span-2 ">
 			<button onclick={ () => ondelete(id)} >

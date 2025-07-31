@@ -4,11 +4,10 @@
 	// import Footer from '$lib/components/Footer.svelte';
 	import { redirect } from '@sveltejs/kit';
 	import { authClient } from '$lib/auth/auth-client';
+	let { data = { isLoggedIn : false } , children  } = $props();
 
-
-	let { children } = $props();
 </script>
 
-<Navbar/>
+<Navbar isLoggedIn={data.isLoggedIn} />
 {@render children()}
 <!-- <Footer/> -->

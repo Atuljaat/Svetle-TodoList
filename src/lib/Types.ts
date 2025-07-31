@@ -22,6 +22,7 @@ export type dbTodo = {
 
 
 export type sort = "Time" | "Priority" | "Deadline"
+export type filterTodo = "All" | "Completed" | "Pending"
 
 export type SignInEmailParams = Parameters<typeof authClient.signIn.email>[0];
 export type SignUpEmailParams = Parameters<typeof authClient.signUp.email>[0];

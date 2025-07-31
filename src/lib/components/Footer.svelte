@@ -3,9 +3,9 @@
 </script>
 
 <footer>
-    <div class="text-center py-4 bg-pink-200 h-[20%]">
+    <div class="text-center py-4 bg-[#ffb86a] h-[20%]">
         <p class="text-sm " >
-            This is a simple Todo List made in Svelte 
+            Thank you for using this TodoList app!
         </p>
     </div>
 </footer>
