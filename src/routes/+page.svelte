@@ -42,7 +42,7 @@ greenLineProbability()
             Create Your First Todo
         </button>
     </div>
-    <div class="flex py-10 rounded-2xl justify-center items-center"> 
+    <div class="flex pt-10 rounded-2xl justify-center items-center px-16"> 
         <img src={Image} class="rounded-2xl border-2 shadow-2xl w-full max-w-md h-auto sm:max-w-4xl lg:max-w-5xl" alt="" srcset="">
     </div>
 </div>

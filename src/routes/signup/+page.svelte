@@ -50,12 +50,15 @@
             errorMessage = error.message
             return
         }
-        goto('/todo')
+        goto('/todos')
     }
 
 </script>
 
-<form onsubmit={signup}  class="bg-red-100 min-h-screen flex items-center justify-center flex-col gap-3 text-xl">
+    <form onsubmit={signup}  class="bg-[#ffb86a] min-h-screen flex items-center justify-center flex-col gap-3 text-xl">
+        <div class="text-6xl py-4 font-bold stylish " >
+            Sign Up
+        </div>
         {#if errorMessage != ''}
             <div class="text-red-500 text-lg">
                 {errorMessage}
@@ -63,22 +66,32 @@
         {/if}
         <div  >
             <label for=""> Name : </label>
-            <input autocomplete="off" bind:value={name} type="text"  class="bg-red-200 text-gray-700">
+            <input autocomplete="off" bind:value={name} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <div  >
             <label for=""> Email : </label>
-            <input autocomplete="off" bind:value={email} type="text"  class="bg-red-200 text-gray-700">
+            <input autocomplete="off" bind:value={email} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <div  >
             <label for=""> Password : </label>
-            <input autocomplete="off" bind:value={password} type="text" class="bg-red-200 text-gray-700">
+            <input autocomplete="off" bind:value={password} type="text" class="p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
-        <button class="bg-red-300 p-2 my-2 rounded cursor-pointer hover:scale-110" >
-            Sign Up 
+        <button class="bg-[#ffd6a7] transition-all duration-200  hover:bg-[#fef3c6] p-2 my-2 rounded cursor-pointer hover:scale-110" >
+            Submit
         </button>
         <div class="my-10" >
+            <span class="text-gray-700">
+                Already have an account?
+            </span>
             <a href="/login">
-                Already have a account ? Login
+                Login
             </a>
         </div>
-</form>
+    </form>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Reenie+Beanie&display=swap');
+    .stylish {
+        font-family:  cursive;
+    }
+</style>

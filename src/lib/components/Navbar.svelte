@@ -61,7 +61,7 @@ const login = [
 				{/if} -->
 			</a>
 		</h1>
-		<ul class="md:flex hidden gap-4 items-center " >
+		<ul class="flex gap-4 items-center " >
 			{#each NavItems as {name,slug,hidden} (name) }
 				<li>
 					<a href={slug} class={`${ hidden ? 'invisible' : '' } `}>
@@ -76,15 +76,12 @@ const login = [
 					</button>
 				{:else}
 					{#each notLogin as {name,slug} (name)}
-						<a href={slug} class="bg-[#ffd6a7] hover:bg-[#fef3c6] rounded hover:scale-110 transition-all duration-200">
+						<a href={slug} class="bg-[#ffd6a7] p-2 hover:bg-[#fef3c6] rounded hover:scale-110 transition-all duration-200">
 							{name}
 						</a>
 					{/each}
 				{/if}
 			</div>
 		</ul>
-		<div class="flex md:hidden" >
-			<Menu/>
-		</div>
 	</div>
 </nav>
