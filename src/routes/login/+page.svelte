@@ -41,6 +41,10 @@
         if (error && error.message){
             errorMessage = error.message
         }
+        if (data) {
+            // Redirect to todos page after successful login
+            window.location.href = '/todos';
+        }
     }
 
 </script>

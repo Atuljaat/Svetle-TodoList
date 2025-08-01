@@ -278,7 +278,7 @@
 
 <div class="flex min-h-screen flex-col bg-linear-to-r bg-[#ffb86a] py-24 px-5" >
 	<div class="flex w-full flex-col items-center justify-center gap-5">
-		<div class="text-6xl stylish my-5"> Write Something you want do </div>
+		<div class="text-6xl stylish text-pretty leading-19  text-center  my-5"> Write Something you want do </div>
 		<form onsubmit={addTodo} class="flex w-full justify-center gap-4">
 			<input
 				bind:value={inputText}
