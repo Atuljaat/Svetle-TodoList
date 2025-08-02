@@ -10,4 +10,3 @@
 
 <Navbar isLoggedIn={data.isLoggedIn} />
 {@render children()}
-<!-- <Footer/> -->

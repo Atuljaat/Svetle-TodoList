@@ -58,24 +58,26 @@
                 {errorMessage}
             </div>
         {/if}
-        <div  >
-            <label for=""> Email : </label>
-            <input autocomplete="off" bind:value={email} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
-        </div>
-        <div  >
-            <label for=""> Password : </label>
-            <input autocomplete="off" bind:value={password} type="text" class="p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
-        </div>
-        <button class="bg-[#ffd6a7] transition-all duration-200 hover:bg-[#fef3c6] p-2 my-2 rounded cursor-pointer hover:scale-110" >
-            Submit
-        </button>
-        <div class="my-10" >
-            <span class="text-gray-700">
-                Didnt have a account ?
-            </span>
-            <a href="/signup">
-                Signup
-            </a>
+        <div class="px-6 flex flex-col items-center gap-3">
+            <div>
+                <label for=""> Email : </label>
+                <input autocomplete="off" bind:value={email} type="text"  class="w-full p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
+            </div>
+            <div  >
+                <label for=""> Password : </label>
+                <input autocomplete="off" bind:value={password} type="text" class="w-full  p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
+            </div>
+            <button class="bg-[#ffd6a7] transition-all duration-200 hover:bg-[#fef3c6] p-2 my-2 rounded cursor-pointer hover:scale-110" >
+                Submit
+            </button>
+            <div class="my-10" >
+                <span class="text-gray-700">
+                    Didnt have a account ?
+                </span>
+                <a href="/signup">
+                    Signup
+                </a>
+            </div>
         </div>
     </form>
 
@@ -84,4 +86,4 @@
     .stylish {
         font-family:  cursive;
     }
-</style>    
+</style>

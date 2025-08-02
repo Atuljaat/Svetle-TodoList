@@ -64,17 +64,19 @@
                 {errorMessage}
             </div>
         {/if}
+        <div class="px-6 flex flex-col items-center gap-3">
+
         <div  >
             <label for=""> Name : </label>
-            <input autocomplete="off" bind:value={name} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
+            <input autocomplete="off" bind:value={name} type="text"  class="w-full p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <div  >
             <label for=""> Email : </label>
-            <input autocomplete="off" bind:value={email} type="text"  class=" p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
+            <input autocomplete="off" bind:value={email} type="text"  class="w-full p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <div  >
             <label for=""> Password : </label>
-            <input autocomplete="off" bind:value={password} type="text" class="p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
+            <input autocomplete="off" bind:value={password} type="text" class="w-full  p-0.5 pl-2 rounded-sm bg-red-200 text-gray-700" >
         </div>
         <button class="bg-[#ffd6a7] transition-all duration-200  hover:bg-[#fef3c6] p-2 my-2 rounded cursor-pointer hover:scale-110" >
             Submit
@@ -87,6 +89,7 @@
                 Login
             </a>
         </div>
+         </div>
     </form>
 
 <style>

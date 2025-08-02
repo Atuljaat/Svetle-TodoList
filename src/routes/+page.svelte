@@ -57,10 +57,12 @@ function randomSvgAppears (n:number) {
   {#if showGreenLine}
     <div class="fixed left-6 top-0 h-full w-0.5 bg-[#9ae600]"></div>
   {/if}
-  <div class="py-10 px-4 flex flex-col items-center leading-16 gap-3">
+  <div class="py-10 px-4 flex flex-col items-center gap-3">
     <div>
-      <h1 class="text-6xl lg:text-7xl stylish font-bold text-center pt-10">
-        Just a
+      <h1 class="flex flex-col gap-3 text-6xl lg:text-7xl stylish font-bold text-center pt-10">
+        <span class="stylish">
+          Just a
+        </span>
         <span class="text-[#ca3500] stylish underline underline-offset-8 md:underline-offset-10">
           Todolist
         </span>
